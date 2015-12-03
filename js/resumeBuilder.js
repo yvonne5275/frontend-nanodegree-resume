@@ -19,7 +19,7 @@ var work ={
 		"description": "Managed the Test Automation and Build and Release teams for the TiVo Comcast and TiVo Cox DVR products."
 	}],
 	"display": "function"
-}
+};
 
 var projects ={
 	"project":[{
@@ -34,7 +34,7 @@ var projects ={
 		"images":["images/fry.jpg","images/fry.jpg"]
 	}],
 	"display": "function"
-}
+};
 
 var bio = {
 	"name" : "Yvonne Lawrence",
@@ -50,7 +50,7 @@ var bio = {
 	"skills": ["skill1","skill2","skill3","skill4"],
 	"biopic": "images/yvonne.jpg",
 	"display": "function"
-}
+};
 
 var education = {
 	"schools":[{
@@ -58,7 +58,7 @@ var education = {
 		"location": "Berkeley, CA",
 		"degree": "BA",
 		"majors": ["Biological Sciences","Basket Weaving"],
-		"dates": " ",
+		"dates": 0 ,
 		"url": " school1 url"
 	},
 	{
@@ -66,24 +66,24 @@ var education = {
 		"location": "Santa Clara, CA",
 		"degree": "Certificate",
 		"majors": ["Computer Programming"],
-		"dates": "2010",
+		"dates": 2010,
 		"url": "school2 url"
 	}],
 	"onlineCourses":[
 	{
 		"title": "online course title1",
 		"school": "Udacity",
-		"dates": "2015",
+		"dates": 2015,
 		"url": "course1 url"
 	},
 	{
 		"title": "online course title2",
 		"school": "Udacity",
-		"dates": "2015",
+		"dates": 2015,
 		"url": "course2 url"
 	}],
 	"display": "function"
-}
+};
 
 /* bio*/
 bio.display = function(){
@@ -112,7 +112,6 @@ bio.display = function(){
 	$("#header").append(HTMLskillsStart);
 	for (var i =0; i < numberOfSkills; i++){
 		var formattedSkill = HTMLskills.replace("%data%",bio.skills[i]);
-		//$("#skills:last").append(formattedSkill);
 		$("#header:last").append(formattedSkill);
 	}
 	/*footer */
@@ -122,13 +121,13 @@ bio.display = function(){
 							formattedTwitter +
 							formattedLocation
 							);
-}
+};
 bio.display();
 
 /* work experience*/
 work.display = function(){
-	for(job in work.jobs){
-		$("#workExperience").append(HTMLworkStart);
+	$("#workExperience").append(HTMLworkStart);
+	for(var job in work.jobs){
 		if (work.jobs.hasOwnProperty(job)){
 			var formattedEmployer = HTMLworkEmployer.replace("%data%",work.jobs[job].employer);
 			var formattedJobTitle = HTMLworkTitle.replace("%data%",work.jobs[job].title);
@@ -140,14 +139,14 @@ work.display = function(){
 			$(".work-entry:last").append(formattedJobDescription);
 		}
 	}
-}
+};
 work.display();
 
 /* projects */
 projects.display = function(){
-	for(proj in projects.project){
-			$("#projects").append(HTMLprojectStart);
-			if (projects.project.hasOwnProperty(proj)){
+	$("#projects").append(HTMLprojectStart);
+	for(var proj in projects.project){
+		if (projects.project.hasOwnProperty(proj)){
 				var formattedTitle = HTMLprojectTitle.replace("%data%",projects.project[proj].title);
 				$(".project-entry:last").append(formattedTitle);
 				var formattedDates = HTMLprojectDates.replace("%data%",projects.project[proj].dates);
@@ -159,21 +158,27 @@ projects.display = function(){
 						var formattedImages = HTMLprojectImage.replace("%data%",projects.project[proj].images[i]);
 						$(".project-entry:last").append(formattedImages);
 				}
-			}
+		}
 	}
-}
+};
 projects.display();
 
 /* education */
 /* Could not find a HTML school URL???? */
 education.display = function(){
-	for(school in education.schools){
-		$("#education").append(HTMLschoolStart);
+	var formattedSchoolDates;
+	$("#education").append(HTMLschoolStart);
+	for(var school in education.schools){
 		if (education.schools.hasOwnProperty(school)){
 			var formattedSchoolName = HTMLschoolName.replace("%data%",education.schools[school].name);
 			var formattedSchoolDegree= HTMLschoolDegree.replace("%data%",education.schools[school].degree);
 			$(".education-entry:last").append(formattedSchoolName + formattedSchoolDegree);
-			var formattedSchoolDates = HTMLschoolDates.replace("%data%",education.schools[school].dates);
+			if(education.schools[school].dates === 0){
+				formattedSchoolDates = HTMLschoolDates.replace("%data%"," ");
+			}
+			else{
+				formattedSchoolDates = HTMLschoolDates.replace("%data%",education.schools[school].dates);
+			}
 			$(".education-entry:last").append(formattedSchoolDates);
 			var formattedSchoolLocation = HTMLschoolLocation.replace("%data%",education.schools[school].location);
 			$(".education-entry:last").append(formattedSchoolLocation);
@@ -182,14 +187,12 @@ education.display = function(){
 				var formattedSchoolMajor= HTMLschoolMajor.replace("%data%",education.schools[school].majors[i]);
 				$(".education-entry:last").append(formattedSchoolMajor);
 			}
-
 		}
 	}
 
 	/*online courses */
 	$("#education").append(HTMLonlineClasses);
-	for(course in education.onlineCourses){
-		//$("#education").append(HTMLonlineClasses);
+	for(var course in education.onlineCourses){
 		if (education.onlineCourses.hasOwnProperty(course)){
 			var formattedOnlineTitle = HTMLonlineTitle.replace("%data%",education.onlineCourses[course].title);
 			var formattedOnlineSchool = HTMLonlineSchool.replace("%data%",education.onlineCourses[course].school);
@@ -200,7 +203,7 @@ education.display = function(){
 			$(".education-entry:last").append(formattedOnlineURL);
 		}
 	}
-}// end function
+};// end function
 education.display();
 
 
@@ -211,10 +214,12 @@ $("#mapDiv").append(googleMap);
 
 function locationizer(work_obj) {
  var locationArray =[];
- for(job in work_obj.jobs){
+ for(var job in work_obj.jobs){
+ 	if (work_obj.jobs.hasOwnProperty(job)){
      var newLocation = work_obj.jobs[job].location;
      locationArray.push(newLocation);
     }
+ }
    return locationArray;
 }
 // Did locationizer() work? This line will tell you!
